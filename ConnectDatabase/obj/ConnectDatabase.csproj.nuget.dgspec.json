@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/macbook/Documents/GitHub/ConnectDatabase/ConnectDatabase/ConnectDatabase.csproj": {}
+    "/Users/macbook/Documents/GitHub/userinfor/ConnectDatabase/ConnectDatabase.csproj": {}
   },
   "projects": {
-    "/Users/macbook/Documents/GitHub/ConnectDatabase/ConnectDatabase/ConnectDatabase.csproj": {
+    "/Users/macbook/Documents/GitHub/userinfor/ConnectDatabase/ConnectDatabase.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/macbook/Documents/GitHub/ConnectDatabase/ConnectDatabase/ConnectDatabase.csproj",
+        "projectUniqueName": "/Users/macbook/Documents/GitHub/userinfor/ConnectDatabase/ConnectDatabase.csproj",
         "projectName": "ConnectDatabase",
-        "projectPath": "/Users/macbook/Documents/GitHub/ConnectDatabase/ConnectDatabase/ConnectDatabase.csproj",
+        "projectPath": "/Users/macbook/Documents/GitHub/userinfor/ConnectDatabase/ConnectDatabase.csproj",
         "packagesPath": "/Users/macbook/.nuget/packages/",
-        "outputPath": "/Users/macbook/Documents/GitHub/ConnectDatabase/ConnectDatabase/obj/",
+        "outputPath": "/Users/macbook/Documents/GitHub/userinfor/ConnectDatabase/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/macbook/.nuget/NuGet/NuGet.Config"

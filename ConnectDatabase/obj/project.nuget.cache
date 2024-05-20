@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "NIVbRWlrh1TE2Cht2hH8lR+fSRPBmWS51O3stf+CmgoVvsj1ZPwwKg5CNlmHVwTnjY7PyKzHBwA4XTvkYS5UTg==",
+  "dgSpecHash": "JYE04Dv6D92TnOtaORQaF1sTg881/FDtC4Qt9Ztp7TU6aZ6RRtjBLkUx6h6n7NnU5EmTAei1OYxcbwRmRZkxSQ==",
   "success": true,
-  "projectFilePath": "/Users/macbook/Documents/GitHub/ConnectDatabase/ConnectDatabase/ConnectDatabase.csproj",
+  "projectFilePath": "/Users/macbook/Documents/GitHub/userinfor/ConnectDatabase/ConnectDatabase.csproj",
   "expectedPackageFiles": [
     "/Users/macbook/.nuget/packages/bouncycastle.cryptography/2.2.1/bouncycastle.cryptography.2.2.1.nupkg.sha512",
     "/Users/macbook/.nuget/packages/google.protobuf/3.25.1/google.protobuf.3.25.1.nupkg.sha512",
