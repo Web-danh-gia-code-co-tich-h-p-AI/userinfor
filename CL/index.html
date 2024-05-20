@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Goods</title>
+
+    <style>
+        form {
+            border: solid 5px;
+            border-radius: 10px;
+            width: 400px;
+            text-align: center;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 50px;
+        }
+
+        
+        button {
+            margin: 10px;
+            height: 30px;
+            width: 100px;
+            border-radius: 10px;
+            color: rgb(21, 50, 75);
+            background-color:antiquewhite ;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: small;
+            
+        }
+        h2,h3{
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            
+        }
+        button:hover {
+            background-color: rgb(71, 102, 123);
+            color: aliceblue;
+        }
+
+        input {
+            margin: 5px;
+            height: 20px;
+            width: 300px;
+            
+        }
+
+        .error {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .List{
+            text-align: center;
+            margin-top: 50px;
+            color: black;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            display: block;
+            font-size: larger;
+        }
+        
+    </style>
+</head>
+<body>
+    <form id="myForm">
+        <h3>Manage Goods</h3>
+        <h2>Hoàng Minh Hải - BIT220049</h2>
+        <input type="text" id="inputCode" placeholder="goods Code" >
+        <br>
+        <span id="codeError" class="error"></span> <!-- Error message for code -->
+        <br>
+        <input type="text" id="inputName" placeholder="goods Name">
+        <br>
+        <span id="nameError" class="error"></span> <!-- Error message for name -->
+        <br>
+        <input type="number" id="inputQuantity" placeholder="Quantity">
+        <br>
+        <span id="quantityError" class="error"></span> <!-- Error message for quantity -->
+        <br>
+        <input type="text" id="inputNote" placeholder="Note">
+        <br>
+        <button type="button" onclick="searchGood()">Search</button>
+        <button type="button" onclick="addGood()">Add</button>
+        <button type="button" onclick="updateGood()">Update</button>
+        <button type="button" onclick="deleteGood()">Delete</button>
+        <button type="button" onclick="getGoodsList()">Get List</button>
+        <button type="button" onclick="updateNote()">Update Note</button>
+
+
+
+    </form>
+    <div class="List" id="goodsList"></div>
+
+    <script>
+        document.getElementById('inputCode').addEventListener('input', validateCode);
+        document.getElementById('inputName').addEventListener('input', validateName);
+        document.getElementById('inputQuantity').addEventListener('input', validateQuantity);
+
+        function validateCode() {
+            const codeInput = document.getElementById('inputCode');
+            const codeError = document.getElementById('codeError');
+            const code = codeInput.value.trim();
+
+            codeError.textContent = ''; // Xóa thông báo lỗi trước đó
+
+            if (code === '') {
+                codeError.textContent = 'Mã hàng hóa là bắt buộc.';
+            } else if (code.length !== 9) {
+                codeError.textContent = 'Mã hàng hóa phải có đúng 9 ký tự.';
+            }
+        }
+
+        function validateName() {
+            const nameInput = document.getElementById('inputName');
+            const nameError = document.getElementById('nameError');
+            const name = nameInput.value.trim();
+
+            nameError.textContent = '';
+
+            if (name === '') {
+                nameError.textContent = 'Tên hàng hóa là bắt buộc.';
+            }
+        }
+
+        function validateQuantity() {
+            const quantityInput = document.getElementById('inputQuantity');
+            const quantityError = document.getElementById('quantityError');
+            const quantity = quantityInput.value.trim();
+
+            quantityError.textContent = '';
+
+            if (quantity === '') {
+                quantityError.textContent = 'Số lượng là bắt buộc.';
+            } else if (isNaN(quantity) || parseInt(quantity) < 0) {
+                quantityError.textContent = 'Số lượng phải là số nguyên dương.';
+            }else if (!/^\d+$/.test(quantity)) { // Kiểm tra nếu không phải là số
+            quantityError.textContent = 'Số lượng chỉ có thể là số.';
+    }
+        }
+        function searchGood() {
+            validateCode(); // Validate mã hàng hóa
+            const ma_hanghoa = document.getElementById('inputCode').value.trim();
+
+            fetch(`https://bewbewbew-001-site1.ftempurl.com/api/demo/get-goods-by-id/${ma_hanghoa}`)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Good with code ' + ma_hanghoa + ' not found.');
+                    }
+                })
+                .then(data => {
+                    document.getElementById('inputName').value = data.ten_hanghoa;
+                    document.getElementById('inputQuantity').value = data.so_luong;
+                    document.getElementById('inputNote').value = data.ghi_chu;
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(error.message);
+                });
+        }
+
+        function addGood() {
+            validateCode(); // Validate mã hàng hóa
+            validateName(); // Validate tên hàng hóa
+            validateQuantity(); // Validate số lượng
+            const ma_hanghoa = document.getElementById('inputCode').value.trim();
+            const ten_hanghoa = document.getElementById('inputName').value.trim();
+            const so_luong = document.getElementById('inputQuantity').value.trim();
+            const ghi_chu = document.getElementById('inputNote').value.trim();
+
+
+            // Client-side Validation
+            const codeError = document.getElementById('codeError');
+            const nameError = document.getElementById('nameError');
+            const quantityError = document.getElementById('quantityError');
+
+            // Reset error messages
+            codeError.textContent = '';
+            nameError.textContent = '';
+            quantityError.textContent = '';
+
+            if (ma_hanghoa === '') {
+                codeError.textContent = 'Code is required.';
+                return; 
+            } else if (ma_hanghoa.length !== 9) {
+                codeError.textContent = 'Code must be exactly 9 characters long.';
+                return;
+            }
+
+            if (ten_hanghoa === '') {
+                nameError.textContent = 'Name is required.';
+                return; 
+            }
+
+            fetch(`https://bewbewbew-001-site1.ftempurl.com/api/demo/add-goods`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ma_hanghoa: ma_hanghoa, // Fix: Change the key name to "ma_hanghoa"
+                    ten_hanghoa: ten_hanghoa,
+                    so_luong: so_luong,
+                    ghi_chu:ghi_chu
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Good added successfully.');
+                } else {
+                    throw new Error('Failed to add good.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message);
+            });
+        }
+
+        function updateGood() {
+            validateCode(); // Validate mã hàng hóa
+            validateName(); // Validate tên hàng hóa
+            validateQuantity(); // Validate số lượng
+            const ma_hanghoa = document.getElementById('inputCode').value.trim();
+            const ten_hanghoa = document.getElementById('inputName').value.trim();
+            const so_luong = document.getElementById('inputQuantity').value.trim();
+            const ghi_chu = document.getElementById('inputNote').value.trim(); // Thêm ghi_chu
+
+            fetch(`https://bewbewbew-001-site1.ftempurl.com/api/demo/update-goods/${ma_hanghoa}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ten_hanghoa: ten_hanghoa,
+                    so_luong: so_luong,
+                    ghi_chu: ghi_chu // Thêm ghi_chu
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Good updated successfully.');
+                } else {
+                    throw new Error('Failed to update good.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message);
+            });
+        }
+
+        function deleteGood() {
+            validateCode(); // Validate mã hàng hóa
+            const ma_hanghoa = document.getElementById('inputCode').value.trim();
+            
+            fetch(`https://bewbewbew-001-site1.ftempurl.com/api/demo/delete-goods/${ma_hanghoa}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Good deleted successfully.');
+                    document.getElementById('inputCode').value = '';
+                    document.getElementById('inputName').value = '';
+                    document.getElementById('inputQuantity').value = '';
+                    document.getElementById('inputNote').value = '';
+
+                } else {
+                    throw new Error('Failed to delete good.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message);
+            });
+        } 
+        
+        function getGoodsList() {
+            fetch(`https://bewbewbew-001-site1.ftempurl.com/api/demo/get-goods-list`)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Failed to get goods list.');
+                    }
+                })
+                .then(data => {
+                    // Xử lý dữ liệu danh sách hàng hóa
+                    const goodsListElement = document.getElementById('goodsList');
+                    goodsListElement.innerHTML = ''; // Xóa nội dung cũ
+                    data.forEach(good => {
+                        const listItem = document.createElement('div');
+                        listItem.textContent = `Goods ID: ${good.ma_hanghoa}/ Name of goods: ${good.ten_hanghoa}/ Count: ${good.so_luong}/ Note: ${good.ghi_chu}`;
+                        goodsListElement.appendChild(listItem);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(error.message);
+                });
+        }
+        
+        function updateNote() {
+            validateCode(); // Validate mã hàng hóa
+            const ma_hanghoa = document.getElementById('inputCode').value.trim();
+            const ghi_chu = document.getElementById('inputNote').value.trim();
+
+            fetch(`https://bewbewbew-001-site1.ftempurl.com/api/demo/update-note?ma_hanghoa=${ma_hanghoa}&ghi_chu=${encodeURIComponent(ghi_chu)}`, {
+                method: 'PUT', 
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Note updated successfully.');
+                } else {
+                    throw new Error('Failed to update note.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message);
+            });
+        }
+
+
+
+    </script>
+</body>
+</html>
